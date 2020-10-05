@@ -1,8 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const ObjectId = require('mongodb').ObjectId;
 const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config()
+
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.egr2g.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
@@ -60,6 +62,13 @@ app.get('/call',(req, res) =>{
     res.send(result)
   })
   
+})
+//single data load
+app.get('/product/:_id', (req, res) => {
+  volunteerCollection.find({_id: req.params._id})
+  .toArray( (err, documents) => {
+    res.send(documents[0]);
+  })
 })
 
 });
