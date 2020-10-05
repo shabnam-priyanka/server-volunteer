@@ -13,7 +13,9 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const port = 5000
-
+app.get('/',(req, res)=>{
+  res.send('hello world')
+} )
 
 
 
@@ -21,6 +23,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
     
   const volunteerCollection = client.db("volunteerWork").collection("volunteer");
+  const volunteerRegistration = client.db("volunteerWork").collection("registration");
   console.log('database connected');
   app.post('/addDetails',(req, res)=> {
       const name = req.body;
@@ -32,11 +35,32 @@ client.connect(err => {
       })
       .catch(err => console.log(err))
   })
-
+//rewon 
+app.post('/shabnam', (req, res) => {
+  const registrationsDetails = req.body;
+  volunteerRegistration.insertOne(registrationsDetails)
+      .then(result => {
+          console.log(result.insertedCount);
+          res.send(result.insertedCount > 0)
+      })
+})
 //this is to read the details
-app.get('/details',(req, res) =>{
-
-} )
+//volunteerCollection na volunteerRegistration confuse
+app.get('/registration',(req, res) =>{
+  volunteerRegistration.find({email: req.query.email})
+  .toArray((err, result) => {
+    res.send(result)
+  })
+  
+})
+//this get is for all data get 
+app.get('/call',(req, res) =>{
+  volunteerCollection.find({})
+  .toArray((err, result) => {
+    res.send(result)
+  })
+  
+})
 
 });
 
