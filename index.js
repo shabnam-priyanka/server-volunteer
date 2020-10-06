@@ -37,17 +37,17 @@ client.connect(err => {
       })
       .catch(err => console.log(err))
   })
-//rewon 
+
 app.post('/shabnam', (req, res) => {
   const registrationsDetails = req.body;
   volunteerRegistration.insertOne(registrationsDetails)
       .then(result => {
           console.log(result.insertedCount);
-          res.send(result.insertedCount > 0)
+          res.send(result)
       })
 })
 //this is to read the details
-//volunteerCollection na volunteerRegistration confuse
+
 app.get('/registration',(req, res) =>{
   volunteerRegistration.find({email: req.query.email})
   .toArray((err, result) => {
@@ -64,8 +64,8 @@ app.get('/call',(req, res) =>{
   
 })
 //single data load
-app.get('/product/:_id', (req, res) => {
-  volunteerCollection.find({_id: req.params._id})
+app.get('/registration/:id', (req, res) => {
+  volunteerCollection.find({_id: ObjectId(req.params.id)})
   .toArray( (err, documents) => {
     res.send(documents[0]);
   })
@@ -73,7 +73,20 @@ app.get('/product/:_id', (req, res) => {
 
 });
 
+//this is for delete button
+// app.delete('/deleteRegistration/:id', (req, res) => {
+//   registrations.deleteOne({ _id: ObjectId(req.params.id) })
+//       .then(result => {
+//           console.log(result, 'tui are nai');
+//       })
+// })
 
+// app.delete('/deleteUser/:id', (req, res) => {
+//   registrations.deleteOne({ _id: ObjectId(req.params.id) })
+//       .then(result => {
+//           res.send(result.deletedCount > 0);
+//       })
+// })
 
 
 
